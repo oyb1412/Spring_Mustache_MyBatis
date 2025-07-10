@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>프로필 이미지 수정</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="p-6 text-sm text-gray-800">
+
+  <input type="hidden" id="user-id" value="{{user.id}}" />
+
+  <h2 class="text-lg font-bold mb-4">프로필 이미지 변경</h2>
+
+  <!-- 프로필 이미지 미리보기 -->
+  <div class="mb-6">
+    {{#user.profileImageBase64}}
+      <img
+        id="preview-image"
+        src="data:image/png;base64,{{user.profileImageBase64}}"
+        class="w-32 h-32 rounded-full object-cover border border-gray-300 mx-auto"
+        alt="프로필 이미지"
+      />
+    {{/user.profileImageBase64}}
+    {{^user.profileImageBase64}}
+      <img
+        id="preview-image"
+        src="/images/default-profile.png"
+        class="w-32 h-32 rounded-full object-cover border border-gray-300 mx-auto"
+        alt="기본 이미지"
+      />
+    {{/user.profileImageBase64}}
+  </div>
+
+  <!-- 파일 선택 -->
+  <div class="mb-6 text-center">
+    <input
+      type="file"
+      accept="image/*"
+      id="image-upload-input"
+      class="block mx-auto text-sm text-gray-700"
+    />
+  </div>
+
+  <!-- 버튼 영역 -->
+  <div class="flex justify-center gap-4">
+    <button
+      id="btn-confirm-image"
+      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+    >
+      확인
+    </button>
+    <button
+      id="btn-cancel-image"
+      class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+    >
+      취소
+    </button>
+  </div>
+
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/js/util.js"></script>
+<script src="/js/editImage.js"></script>

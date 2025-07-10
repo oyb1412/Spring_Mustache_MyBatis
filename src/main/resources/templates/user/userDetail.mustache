@@ -1,0 +1,67 @@
+{{> other/header}}
+
+<main class="container mx-auto px-4 pt-24 pb-12">
+  <div class="flex flex-col md:flex-row gap-8">
+    <input type="hidden" id="user-id" value="{{user.id}}">
+    <!-- 왼쪽 메인 콘텐츠 -->
+    <div class="w-full md:w-3/4">
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">🔍 유저 상세 관리</h1>
+
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 space-y-4">
+
+        <div class="text-sm text-gray-500">유저 번호</div>
+        <div class="text-base font-semibold text-gray-800">{{user.id}}</div>
+
+        <div class="text-sm text-gray-500">닉네임</div>
+        <div class="text-base font-semibold text-gray-800">{{user.nickname}}</div>
+
+        <div class="text-sm text-gray-500">레벨</div>
+        <div class="text-base font-semibold text-gray-800">{{user.level}}</div>
+
+        <div class="text-sm text-gray-500">가입일</div>
+        <div class="text-base font-semibold text-gray-800">{{user.createdDate}}</div>
+
+        <div class="text-sm text-gray-500">현재 상태</div>
+        {{#user.ban}}
+        <div class="text-base font-semibold text-red-500">차단됨</div>
+        {{/user.ban}}
+        {{^user.ban}}
+        <div class="text-base font-semibold text-green-600">정상</div>
+        {{/user.ban}}
+
+        <div class="mt-6 flex gap-4">
+          {{#user.ban}}
+        <button
+          type="button"
+          class="px-4 py-2 bg-green-500 text-white rounded-button hover:bg-green-600"
+          data-user-id="{{user.id}}"
+          id="btn-unban">
+          밴 해제
+        </button>
+        {{/user.ban}}
+
+        {{^user.ban}}
+        <button
+          type="button"
+          class="px-4 py-2 bg-red-500 text-white rounded-button hover:bg-red-600"
+          data-user-id="{{user.id}}"
+          id="btn-ban">
+          밴
+        </button>
+        {{/user.ban}}
+
+          <button onclick="history.back()" type="button" class="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-200">
+            뒤로가기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오른쪽 사이드바 -->
+    {{> other/sidebar}}
+
+  </div>
+</main>
+
+{{> other/footer}}
+<script src="/js/userDetail.js"></script>

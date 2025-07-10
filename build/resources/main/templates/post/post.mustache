@@ -1,0 +1,146 @@
+{{> other/header}}
+
+<main class="container mx-auto px-4 pt-24 pb-12">
+  <div class="flex flex-col md:flex-row gap-8">
+    <input type="hidden" id="post-id" value="{{post.id}}">
+    <input type="hidden" id="board-id" value="{{board.id}}">
+    <!-- 왼쪽 메인 콘텐츠 영역 -->
+    <div class="w-full md:w-3/4">
+
+      <!-- 게시글 카드 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+
+        <!-- 게시판 이름 -->
+        <h2 class="text-xl font-bold text-primary mb-4">{{board.name}}</h2>
+
+        <!-- 게시글 제목 -->
+        <h1 class="text-2xl font-semibold text-gray-800 mb-2">{{post.title}}</h1>
+
+        <!-- 작성자 정보 -->
+  <div class="mb-6 flex items-center justify-between text-sm text-gray-500">
+  <div class="flex items-center gap-3">
+    <!-- 프로필 이미지 -->
+    <img 
+      src="{{#post.authorProfileImage}}data:image/png;base64,{{post.authorProfileImage}}{{/post.authorProfileImage}}{{^post.authorProfileImage}}/images/default-profile.png{{/post.authorProfileImage}}" 
+      alt="작성자 프로필 이미지" 
+      class="w-8 h-8 rounded-full object-cover border"
+    />
+    <span>작성자: <span class="font-medium text-gray-700">{{post.author}}</span></span>
+    <span>레벨: <span class="font-medium text-gray-700">{{post.userLevel}}</span></span>
+  </div>
+  </div>
+
+        <!-- 작성일 + 조회수 + 댓글수 -->
+        <div class="text-sm text-gray-500 mb-6">
+          작성일: {{post.createdDate}} |
+          조회수: {{post.viewCount}} |
+          댓글: {{post.commentCount}}개
+        </div>
+
+        <!-- 게시글 내용 -->
+        <div class="prose max-w-none text-gray-700 whitespace-pre-line leading-relaxed mb-6 min-h-[200px]">
+             {{{post.content}}}
+        </div>
+
+        <!-- 첨부파일 표시 -->
+        {{#post.fileName}}
+        <div class="border-t pt-4 mt-6 mb-4 text-sm text-gray-700">
+          📎 첨부파일:
+          <a href="{{post.filePath}}" download class="text-blue-500 hover:underline ml-2">
+            {{post.fileName}}
+          </a>
+        </div>
+        {{/post.fileName}}
+
+        <!-- 좋아요/싫어요 버튼 -->
+        <div class="flex items-center gap-3 mb-6">
+          <button class="rounded-full bg-gray-100 hover:bg-gray-200 px-4 py-2 text-sm" id="btn-like">👍</button>
+          <span class="text-gray-800 font-medium text-sm">{{post.likeCount}}</span>
+          <button class="rounded-full bg-gray-100 hover:bg-gray-200 px-4 py-2 text-sm" id="btn-dislike">👎</button>
+        </div>
+
+        <!-- 수정/삭제 버튼 (작성자일 경우에만) -->
+        {{#isAuthor}}
+        <div class="flex gap-2 mb-6">
+          <a href="/postEdit-page/{{post.id}}" class="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">수정</a>
+          <button type="button" id="btn-post-delete" class="px-4 py-2 text-sm bg-red-500 text-white rounded hover:bg-red-600">삭제</button>
+        </div>
+        {{/isAuthor}}
+
+        <!-- 뒤로가기 버튼 -->
+        <div class="mt-4">
+          <a href="javascript:history.back()" class="text-sm text-gray-600 hover:underline">← 뒤로가기</a>
+        </div>
+      </div>
+
+      <!-- 댓글 섹션 -->
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mt-8">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">댓글</h3>
+
+       <!-- 댓글 목록 -->
+<div class="space-y-4 mb-6">
+  {{#post.commentsDto}}
+    {{^parentCommentDto}}
+    <!-- 일반 댓글 -->
+    <div class="border rounded px-4 py-3 text-sm text-gray-700 bg-gray-50 relative">
+      <!-- 작성자 -->
+      <div class="mb-1 font-semibold text-gray-800">
+        {{author}}
+        <span class="ml-2 text-xs text-gray-400 font-normal align-middle">{{createdDate}}</span>
+      </div>
+
+      <!-- 댓글 내용 -->
+      <div>{{content}}</div>
+
+      <!-- 우측 상단 버튼 -->
+      <div class="absolute top-2 right-3 space-x-2">
+        <button class="btn-comment-reply text-blue-500 hover:underline text-xs" data-id="{{id}}">답글</button>
+        <button class="btn-comment-delete text-red-500 hover:underline text-xs" data-id="{{id}}">삭제</button>
+      </div>
+    </div>
+
+      <!-- 자식 댓글 (답글) -->
+      {{#childCommentsDto}}
+      <div class="border rounded px-4 py-3 text-sm text-gray-700 bg-white relative ml-6">
+        <div class="mb-1 font-semibold text-gray-800">
+          <span class="text-gray-400 mr-1">↳</span>{{post.author}}
+          <span class="ml-2 text-xs text-gray-400 font-normal align-middle">{{createdDate}}</span>
+        </div>
+        <div>{{content}}</div>
+        <div class="absolute top-2 right-3">
+          <button class="btn-comment-delete text-red-500 hover:underline text-xs" data-id="{{id}}">삭제</button>
+        </div>
+      </div>
+      {{/childCommentsDto}}
+
+    {{/parentCommentDto}}
+  {{/post.commentsDto}}
+
+  {{^post.commentsDto}}
+  <div class="text-sm text-gray-400">아직 댓글이 없습니다.</div>
+  {{/post.commentsDto}}
+</div>
+
+<!-- 댓글 작성 폼 -->
+<div class="mt-6">
+  <div class="flex items-center mb-2">
+    <h5 class="text-sm font-semibold text-gray-800">댓글 작성</h5>
+    <span id="reply-mode-text" class="text-sm text-blue-500 ml-2" style="display: none;">- 답글 작성 중</span>
+  </div>
+  <textarea id="comment-content" class="w-full border rounded px-4 py-2 text-sm" rows="3" placeholder="댓글을 입력하세요"></textarea>
+  <div class="flex justify-end mt-2">
+    <button type="button" id="btn-comment-register" class="bg-primary text-white text-sm px-4 py-2 rounded hover:bg-primary-dark">댓글 작성</button>
+  </div>
+</div>
+      </div>
+
+    </div>
+
+    <!-- 오른쪽 사이드바 -->
+    {{> other/sidebar}}
+
+  </div>
+</main>
+
+{{> other/footer}}
+<script src="/js/post.js"></script>

@@ -1,0 +1,48 @@
+{{> other/header}}
+
+<main class="container mx-auto px-4 pt-24 pb-12">
+  <div class="flex flex-col md:flex-row gap-8">
+
+    <!-- 왼쪽 메인 콘텐츠 영역 -->
+    <div class="w-full md:w-3/4">
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">👥 유저 관리</h1>
+
+      <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-100">
+        <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 font-medium text-gray-500 whitespace-nowrap">번호</th>
+              <th class="px-6 py-3 font-medium text-gray-500 whitespace-nowrap">이름</th>
+              <th class="px-6 py-3 font-medium text-gray-500 whitespace-nowrap">레벨</th>
+              <th class="px-6 py-3 font-medium text-gray-500 whitespace-nowrap">밴 여부</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {{#users}}
+            <tr class="hover:bg-gray-50 cursor-pointer" onclick="location.href='/userDetail-page/{{id}}'">
+              <td class="px-6 py-4 text-gray-700 whitespace-nowrap">{{id}}</td>
+              <td class="px-6 py-4 text-gray-700 whitespace-nowrap">{{nickname}}</td>
+              <td class="px-6 py-4 text-gray-700 whitespace-nowrap">{{level}}</td>
+              <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
+                {{#ban}}<span class="text-red-500 font-semibold">O</span>{{/ban}}
+                {{^ban}}<span class="text-gray-400">X</span>{{/ban}}
+              </td>
+            </tr>
+            {{/users}}
+            {{^users}}
+            <tr>
+              <td colspan="4" class="px-6 py-6 text-center text-gray-400">유저가 없습니다</td>
+            </tr>
+            {{/users}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 오른쪽 사이드바 -->
+    {{> other/sidebar}}
+
+  </div>
+</main>
+
+{{> other/footer}}

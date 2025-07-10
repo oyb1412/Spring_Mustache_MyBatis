@@ -1,0 +1,97 @@
+<!-- 오른쪽 사이드바 -->
+<div class="w-full md:w-1/4">
+<div class="sticky-sidebar">
+<!-- 로그인 폼 -->
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-6">
+  {{#user}}
+  <!-- 로그인된 상태 -->
+  <h3 class="text-lg font-bold text-gray-800 mb-4">환영합니다, {{nickname}}님</h3>
+
+  <p class="text-center text-sm text-gray-500 mb-2">
+  LV.{{level}}
+  </p>
+
+  <!-- 유저 프로필 이미지 -->
+  <div class="flex justify-center my-4">
+  <img 
+    src="{{#profileImageBase64}}data:image/png;base64,{{profileImageBase64}}{{/profileImageBase64}}{{^profileImageBase64}}/images/default-profile.png{{/profileImageBase64}}" 
+    alt="프로필 이미지" 
+    class="w-24 h-24 rounded-full object-cover border"
+  />
+  </div>
+
+  <div class="space-y-3">
+
+    {{#isAdmin}}
+    <a href="/admin-page" class="block w-full py-2 text-center bg-red-500 text-white rounded-button hover:bg-red-600 whitespace-nowrap !rounded-button">
+      유저 관리
+    </a>
+    {{/isAdmin}}
+
+    <a href="/my-page" class="block w-full py-2 text-center bg-white border border-gray-300 text-gray-700 rounded-button hover:bg-gray-50 whitespace-nowrap !rounded-button">마이페이지</a>
+    <form method="post" action="/userLogout">
+      <button type="submit" class="w-full py-2 bg-primary text-white rounded-button hover:bg-blue-600 whitespace-nowrap !rounded-button">로그아웃</button>
+    </form>
+  </div>
+  {{/user}}
+
+  {{^user}}
+  <!-- 로그인 안내 -->
+  <h3 class="text-lg font-bold text-gray-800 mb-4">로그인 필요</h3>
+  <p class="text-sm text-gray-600 mb-4">로그인 후 이용해주세요.</p>
+  <a href="/userLogin-page" class="block w-full py-2 text-center bg-primary text-white rounded-button hover:bg-blue-600 whitespace-nowrap !rounded-button">
+  로그인 페이지로 이동
+  </a>
+  {{/user}}
+</div>
+<!-- 인기 게시물 -->
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-6">
+<h3 class="text-lg font-bold text-gray-800 mb-4">인기 게시물</h3>
+<ul class="space-y-3">
+  {{#popularTop5Post}}
+  <li>
+    <a href="/post-page/{{id}}" class="block hover:bg-gray-50 p-2 rounded">
+      <p class="text-gray-800 font-medium text-sm line-clamp-1">{{title}}</p>
+      <div class="flex items-center text-xs text-gray-500 mt-1">
+        <span>{{category}}</span>
+        <span class="mx-1">•</span>
+        <span>조회 {{viewCount}}</span>
+      </div>
+    </a>
+  </li>
+  {{/popularTop5Post}}
+</ul>
+</div>
+<!-- 카테고리 -->
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-6">
+<h3 class="text-lg font-bold text-gray-800 mb-4">카테고리</h3>
+<ul class="space-y-2">
+  {{#sidebarCategoryList}}
+  <li>
+    <a href="/board-page/{{id}}" class="flex items-center justify-between text-gray-700 hover:text-primary p-2 rounded hover:bg-gray-50">
+      <span>{{name}}</span>
+      <span class="text-xs text-gray-500">{{totalPostCount}}</span>
+    </a>
+  </li>
+  {{/sidebarCategoryList}}
+</ul>
+<div class="mt-3 pt-3 border-t border-gray-100">
+<a href="/boards-page" class="text-primary hover:underline text-sm">전체 카테고리 보기</a>
+</div>
+</div>
+<!-- 공지사항 -->
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+  <h3 class="text-lg font-bold text-gray-800 mb-4">공지사항</h3>
+  <ul class="space-y-2">
+    {{#sidebarNoticeList}}
+    <li>
+      <a href="/post-page/{{id}}" class="block text-gray-700 hover:text-primary text-sm">
+        <p class="line-clamp-1">{{title}}</p>
+        <p class="text-xs text-gray-500 mt-1">{{date}}</p>
+      </a>
+    </li>
+    {{/sidebarNoticeList}}
+  </ul>
+</div>
+</div>
+</div>
