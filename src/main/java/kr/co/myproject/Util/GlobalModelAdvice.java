@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jakarta.servlet.http.HttpSession;
-import kr.co.myproject.controller.enums.Role;
+import kr.co.myproject.enums.Role;
 import kr.co.myproject.dto.Board.SidebarCategoryDto;
 import kr.co.myproject.dto.Post.PopularPostListDto;
 import kr.co.myproject.dto.Post.SidebarNoticeDto;

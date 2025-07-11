@@ -6,7 +6,7 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import kr.co.myproject.controller.enums.Role;
+import kr.co.myproject.enums.Role;
 import kr.co.myproject.entity.User;
 // 세큐리티가 사용하는 사용자 정보 객체
 // 폼 로그인 성공 시, SecurityContext에 이 객체가 저장됨

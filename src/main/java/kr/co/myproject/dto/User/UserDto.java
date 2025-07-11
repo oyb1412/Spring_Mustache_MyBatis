@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.co.myproject.controller.enums.Role;
+import kr.co.myproject.enums.Role;
 import kr.co.myproject.dto.Comment.CommentDto;
 import kr.co.myproject.dto.Post.PostDto;
 import kr.co.myproject.entity.Comment;

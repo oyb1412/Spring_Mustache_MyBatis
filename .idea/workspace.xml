@@ -40,7 +40,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/JavaProject/Spring_Mustache_MyBatis",
+    "last_opened_file_path": "C:/javaProject/Spring_Mustache_MyBatis",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -49,6 +49,7 @@
     "project.structure.last.edited": "모듈",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "settings.sync",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -89,6 +90,7 @@
       <updated>1752075893977</updated>
       <workItem from="1752075895926" duration="156000" />
       <workItem from="1752155147403" duration="927000" />
+      <workItem from="1752195464227" duration="6055000" />
     </task>
     <servers />
   </component>

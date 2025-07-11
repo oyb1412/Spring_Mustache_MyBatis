@@ -1,6 +1,6 @@
 package kr.co.myproject.dto.User;
 
-import kr.co.myproject.controller.enums.FindPasswordQuestion;
+import kr.co.myproject.enums.FindPasswordQuestion;
 import lombok.Getter;
 
 @Getter

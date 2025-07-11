@@ -5,77 +5,46 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import kr.co.myproject.controller.enums.FindPasswordQuestion;
-import kr.co.myproject.controller.enums.Role;
+import kr.co.myproject.enums.FindPasswordQuestion;
+import kr.co.myproject.enums.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor // 파라미터 없는 기본 생성자 자동 생성(JPA 필수)
-@Entity // JPA가 이 클래스를 테이블과 매핑되는 객체로 인식
+@NoArgsConstructor
 public class User extends BaseTimeEntity {
     
-    @Id // 이 필드가 테이블의 기본 키(PK)임을 나타냄
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO_INCREMENT설정
     private Long id;
 
-    @Column(length = 12, nullable = false)
     private String username;
 
-    @Column(length = 100, nullable = false)
     private String password;
 
-    @Column(length = 12, nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
     private int level = 1;
 
-    @Column(nullable = false)
     private int exp = 0;
 
-    @Column(nullable = false)
     private boolean ban = false;
 
-    @Column(nullable = true)
     private String provider;
 
-    @Column(nullable = true)
     private String providerId;
 
-    @Column(columnDefinition = "LONGTEXT" , nullable = true)
     private String profileImageBase64;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private FindPasswordQuestion findPasswordQuestion;
 
-    @Column(nullable = false)
     private String findPasswordQuestionAnswer;
 
-    @Enumerated(EnumType.STRING) //꼭 STRING ! ORDINAL 쓰면 순서 바뀌면 다 꼬임
-    @Column(nullable = false)
     private Role role = Role.MEMBER; // DEFAULT값 지정
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
-     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @ElementCollection
     private Set<Long> likedPostIds = new HashSet<>();
 
     @Builder

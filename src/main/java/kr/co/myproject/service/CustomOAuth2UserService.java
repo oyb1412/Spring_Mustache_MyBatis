@@ -1,7 +1,6 @@
 package kr.co.myproject.service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,8 +15,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.myproject.Util.CustomOAuth2UserDetails;
-import kr.co.myproject.controller.enums.FindPasswordQuestion;
-import kr.co.myproject.controller.enums.Role;
+import kr.co.myproject.enums.FindPasswordQuestion;
+import kr.co.myproject.enums.Role;
 import kr.co.myproject.entity.User;
 import kr.co.myproject.repisitory.UserRepository;
 import kr.co.myproject.security.OAuthAttributes;

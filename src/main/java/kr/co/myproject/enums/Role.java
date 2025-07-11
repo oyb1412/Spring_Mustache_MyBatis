@@ -1,4 +1,4 @@
-package kr.co.myproject.controller.enums;
+package kr.co.myproject.enums;
 
 public enum Role {
     MEMBER, ADMIN, MANAGER

@@ -1,7 +1,7 @@
 package kr.co.myproject.dto.User;
 
 
-import kr.co.myproject.controller.enums.Role;
+import kr.co.myproject.enums.Role;
 import kr.co.myproject.entity.User;
 import lombok.Getter;
 

@@ -1,13 +1,11 @@
 package kr.co.myproject.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -15,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import kr.co.myproject.controller.enums.BoardCategory;
+import kr.co.myproject.enums.BoardCategory;
 import kr.co.myproject.dto.Comment.CommentDto;
 import kr.co.myproject.dto.Post.PopularPostListDto;
 import kr.co.myproject.dto.Post.PostDto;
