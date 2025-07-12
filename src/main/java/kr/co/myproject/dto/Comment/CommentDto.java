@@ -16,26 +16,19 @@ public class CommentDto {
     private Long id;
     private String content;
     private String author;
-    private CommentDto parentCommentDto;
-    private List<CommentDto> childCommentsDto = new ArrayList<>();
+    private Comment parentComment;
     private String createdDate;
 
-    public CommentDto(Comment comment, boolean includeChildren)
+    public CommentDto(Comment comment, Comment parent, String nickname)
     {
         this.id = comment.getId();
         this.content = comment.getContent();
 
-        this.author = comment.getUser().getNickname();
-        Comment parent = comment.getParentComment();
+        this.author = nickname;
 
-        this.parentCommentDto = parent != null ? new CommentDto(parent, false) : null;
+        this.parentComment = parent;
 
         this.createdDate = comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));;
 
-        if (includeChildren) {
-        for (Comment child : comment.getChildComments()) {
-            this.childCommentsDto.add(new CommentDto(child, true));
-        }
-    }
     }
 }

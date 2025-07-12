@@ -11,12 +11,10 @@ import lombok.Getter;
 public class UserPageDto {
     private Long id;
     private String title;
-    private List<CommentDto> comments = new ArrayList<>();
 
-    public UserPageDto(Long id, String title, List<CommentDto> comments)
+    public UserPageDto(Long id, String title)
     {
         this.id = id;
         this.title = title;
-        this.comments = comments;
     }
 }

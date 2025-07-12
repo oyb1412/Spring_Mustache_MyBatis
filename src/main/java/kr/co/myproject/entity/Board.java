@@ -23,22 +23,4 @@ public class Board {
     private int totalPostCount;
 
     private BoardCategory category;
-
-    private List<Post> posts = new ArrayList<>();
-
-    public void setPost(Post post)
-    {
-        this.posts.add(post);
-        this.totalPostCount++;
-    }
-
-    public void deletePost()
-    {
-        this.totalPostCount--;
-    }
-
-    public void setTodayPostCount(int todayPostCount)
-    {
-        this.todayPostCount = todayPostCount;
-    }
 }

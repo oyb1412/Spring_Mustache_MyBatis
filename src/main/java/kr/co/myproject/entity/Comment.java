@@ -10,36 +10,25 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Comment extends BaseTimeEntity {
-    
     private Long id;
 
-    private Post post;
+    private Long postId;
 
-    private User user;
+    private Long userId;
+
+    private Long boardId;
+
+    private Long parentCommentId;
 
     private String content;
 
-    private Comment parentComment;
-
-    private List<Comment> childComments = new ArrayList<>();
-
     @Builder
-    public Comment(Post post, User user, String content, Comment parentComment, List<Comment> childComments)
+    public Comment(Long postId, Long userId, Long boardId, String content, Long parentCommentId)
     {
-        this.post = post;
-        this.user = user;
+        this.postId = postId;
+        this.userId = userId;
+        this.boardId = boardId;
         this.content = content;
-        this.parentComment = parentComment;
-        this.childComments = childComments;
-    }
-
-    public void SetChildComment(Comment comment)
-    {
-        childComments.add(comment);
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
+        this.parentCommentId = parentCommentId;
     }
 }

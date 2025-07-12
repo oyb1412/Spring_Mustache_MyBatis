@@ -25,9 +25,9 @@ public class CommentRegisterDto {
     {
         return Comment.builder()
                       .content(content)
-                      .post(post)
-                      .user(user)
-                      .parentComment(parentComment)
+                      .postId(post.getId())
+                      .userId(user.getId())
+                      .parentCommentId(parentComment.getId())
                       .build();
     }
 

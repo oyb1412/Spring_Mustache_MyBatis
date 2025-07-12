@@ -32,8 +32,8 @@ public class PostRegisterDto {
         return Post.builder()
                    .title(title)
                    .content(content)
-                   .board(board)
-                   .user(user)
+                   .boardId(board.getId())
+                   .userId(user.getId())
                    .build();
     }
 }

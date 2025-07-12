@@ -21,17 +21,11 @@ public class UserDto {
     private String nickname;
     private int level;
     private int exp;
-    private int postCount;
-    private int likedCount;
     private Role role;
     private boolean ban;
     private String createdDate;
     private String profileImageBase64;
 
-    private int commentCount;
-    private List<PostDto> posts = new ArrayList<>();
-    private List<CommentDto> comments = new ArrayList<>();
-    
     public UserDto(User user)
     {
         this.id = user.getId();
@@ -42,15 +36,6 @@ public class UserDto {
         this.ban = user.isBan();
         this.role = user.getRole();
         this.profileImageBase64 = user.getProfileImageBase64();
-        for (Post child : user.getPosts()) {
-            this.posts.add(new PostDto(child));
-        }
-        for (Comment child : user.getComments()) {
-            this.comments.add(new CommentDto(child, true));
-        }
-        this.commentCount = user.getComments().size();
-        this.postCount = user.getPosts().size();
-        this.likedCount = user.getLikedPostIds().size();
         this.createdDate = user.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }

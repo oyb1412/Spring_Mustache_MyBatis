@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import kr.co.myproject.Mapper.CommentMapper;
+import kr.co.myproject.Mapper.PostMapper;
+import kr.co.myproject.Mapper.UserMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import kr.co.myproject.dto.Post.PostDto;
 import kr.co.myproject.dto.User.SessionUser;
 import kr.co.myproject.dto.User.UserDto;
@@ -24,17 +26,15 @@ import kr.co.myproject.dto.User.UserResetPasswordDto;
 import kr.co.myproject.entity.Comment;
 import kr.co.myproject.entity.Post;
 import kr.co.myproject.entity.User;
-import kr.co.myproject.repisitory.CommentRepository;
-import kr.co.myproject.repisitory.PostRepository;
-import kr.co.myproject.repisitory.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
+    private final UserMapper userMapper;
+    private final PostMapper postMapper;
+    private final CommentMapper commentMapper;
     private final PasswordEncoder passwordEncoder;
     
 
@@ -60,7 +60,7 @@ public class UserService {
         }
 
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
-        userRepository.save(dto.buildUserEntity(encodedPassword));
+        userMapper.insert(dto.buildUserEntity(encodedPassword));
 
         return Map.of("success", true, "message", "회원가입 성공");
     }
@@ -68,7 +68,7 @@ public class UserService {
     @Transactional
     public Map<String, Object> modify(UserModifyDto dto, SessionUser sessionUser)
     {
-        User user = userRepository.findById(sessionUser.getId()).orElseThrow();
+        User user = userMapper.findById(sessionUser.getId());
         //현재 비밀번호/새 비밀번호 일치 체크
         if(passwordEncoder.matches(dto.getNewPassword(), user.getPassword()))
         {
@@ -82,7 +82,7 @@ public class UserService {
         }
 
         //닉네임 중복 체크
-        User userCheck = userRepository.findByNickname(dto.getNewNickname());
+        User userCheck = userMapper.findByNickname(dto.getNewNickname());
 
         if(userCheck != null)
         {
@@ -91,7 +91,7 @@ public class UserService {
 
         //비밀번호, 닉네임 업데이트
         String newPassword = passwordEncoder.encode(dto.getNewPassword());
-        user.modify(newPassword, dto.getNewNickname());
+        userMapper.update(newPassword, dto.getNewNickname(), sessionUser.getId());
 
         return Map.of("success", true, "message", "유저 정보 변경에 성공했습니다");
     }
@@ -99,19 +99,19 @@ public class UserService {
     @Transactional
     public Map<String, Object> withdrawal(Long id, HttpSession session)
     {
-        User user = userRepository.findById(id).orElseThrow();
-        List<Post> posts = postRepository.findByUser(user);
-        List<Comment> comments = commentRepository.findByUser(user);
+        User user = userMapper.findById(id);
+        List<Post> posts = postMapper.findByUserId(user.getId());
+        List<Comment> comments = commentMapper.findByUserId(user.getId());
 
         for (Post post : posts) {
-            post.setUser(null); 
+            postMapper.delete(post.getId());
         }
 
         for (Comment comment : comments) {
-            comment.setUser(null); 
+            commentMapper.delete(comment.getId());
         }
 
-        userRepository.delete(user);
+        userMapper.delete(user.getId());
 
         session.invalidate();
 
@@ -121,10 +121,10 @@ public class UserService {
     @Transactional
     public Long upExp(Long postId, String type)
     {
-        Post post = postRepository.findById(postId).orElseThrow();
-        User user = userRepository.findById(post.getUser().getId()).orElseThrow();
+        Post post = postMapper.findById(postId);
+        User user = userMapper.findById(post.getId());
 
-        user.upExp();
+        userMapper.upExp(user.getId());
 
         return user.getId();
     }
@@ -132,10 +132,10 @@ public class UserService {
     @Transactional
     public Long downExp(Long postId, String type)
     {
-        Post post = postRepository.findById(postId).orElseThrow();
-        User user = userRepository.findById(post.getUser().getId()).orElseThrow();
+        Post post = postMapper.findById(postId);
+        User user = userMapper.findById(post.getId());
 
-        user.downExp();
+        userMapper.downExp(user.getId());
 
         return user.getId();
     }
@@ -148,8 +148,8 @@ public class UserService {
             return Map.of("success", false, "message", "자기 자신은 밴 할수 없습니다");
         }
 
-        User user = userRepository.findById(id).orElseThrow();
-        user.ban(true);
+        User user = userMapper.findById(id);
+        userMapper.ban(true, user.getId());
         return Map.of("success", true, "message", "해당 유저를 밴 처리했습니다");
     }
 
@@ -161,9 +161,9 @@ public class UserService {
             return Map.of("success", false, "message", "자기 자신은 밴 할수 없습니다");
         }
 
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userMapper.findById(id);
 
-        user.ban(false);
+        userMapper.ban(false, user.getId());
         return Map.of("success", true, "message", "해당 유저를 밴 해제 처리했습니다");
     }
 
@@ -171,7 +171,7 @@ public class UserService {
     public Map<String, Object> findPassword(UserFindPasswordDto dto,
                                             HttpSession session)
     {
-        User user = userRepository.findByUsername(dto.getUsername());
+        User user = userMapper.findByUsername(dto.getUsername());
 
         if(user == null)
         {
@@ -197,7 +197,7 @@ public class UserService {
                                              HttpSession session)
     {
         String username = (String) session.getAttribute("resetUsername");
-        User user = userRepository.findByUsername(username);
+        User user = userMapper.findByUsername(username);
 
         if(user == null)
         {
@@ -210,9 +210,7 @@ public class UserService {
             return Map.of("success", false, "message", "확인용 비밀번호가 올바르지 않습니다");
         }
 
-        user.ModifyPassword(passwordEncoder.encode(dto.getNewPassword()));
-
-        userRepository.save(user);
+        userMapper.update(user);
 
         session.removeAttribute("resetUsername");
 
@@ -222,13 +220,13 @@ public class UserService {
     @Transactional
     public Map<String, Object> imageUpload(UserProfileImageEdtiDto dto)
     {
-        User user = userRepository.findById(dto.getId()).orElseThrow();
+        User user = userMapper.findById(dto.getId());
 
         if (user == null) {
             return Map.of("success", false, "message", "유저를 찾을 수 없습니다");
         }
 
-        user.setProfileImageBase64(dto.getProfileImageBase64());
+        userMapper.updateProfileImageBase64(dto.getProfileImageBase64(), user.getId());
 
         return Map.of("success", true, "message", "이미지 업로드에 성공했습니다");
     }
@@ -236,7 +234,7 @@ public class UserService {
     public List<UserManagementDto> findByManagement()
     {
         List<UserManagementDto> userDto = new ArrayList<>();
-        List<User> users = userRepository.findAll();
+        List<User> users = userMapper.findAll();
 
         for(User user : users){
             userDto.add(new UserManagementDto(user));
@@ -260,7 +258,7 @@ public class UserService {
 
     public UserDto findByUsername(String username)
     {
-        User user = userRepository.findByUsername(username);
+        User user = userMapper.findByUsername(username);
 
         if(user == null)
             return null;
@@ -270,7 +268,7 @@ public class UserService {
 
     public UserDto findById(Long id)
     {
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userMapper.findById(id);
 
         if(user == null)
             return null;
@@ -280,7 +278,7 @@ public class UserService {
 
     public UserDto findByNickname(String nickname)
     {
-        User user = userRepository.findByNickname(nickname);
+        User user = userMapper.findByNickname(nickname);
 
         if(user == null)
             return null;
@@ -290,7 +288,7 @@ public class UserService {
 
     public List<UserDto> findAll()
     {
-        List<User> users = userRepository.findAll();
+        List<User> users = userMapper.findAll();
 
         return users.stream()
                     .map(UserDto::new)

@@ -16,6 +16,10 @@ import lombok.NoArgsConstructor;
 public class Post extends BaseTimeEntity{
     private Long id;
 
+    private Long userId;
+
+    private Long boardId;
+
     private String title;
 
     private String content;
@@ -38,92 +42,18 @@ public class Post extends BaseTimeEntity{
 
     private int recentViewCount = 0;
 
-    private User user;
-
-    private Board board;
-
-    private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Post(Board board,  Long id, String title, String content,List<Comment> comments, User user, int likeCount, LocalDateTime createdDate, LocalDateTime modifiedDate)
+    public Post(Long id, Long userId, Long boardId, String title, String content,  int likeCount, LocalDateTime createdDate, LocalDateTime modifiedDate)
     {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.comments = comments;
-        this.user = user;
-        this.board = board;
+        this.userId = userId;
+        this.boardId = boardId;
         this.likeCount = likeCount;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.checkDate = LocalDateTime.now();
     }
-
-    public void SetNotice()
-    {
-        this.isNotice = true;
-    }
-
-     public void SetComment(Comment comment)
-    {
-        comments.add(comment);
-    }
-
-       public void upLikeCount()
-    {
-        this.likeCount ++;
-    }
-
-    public void upViewCount()
-    {
-        this.viewCount++;
-        this.recentViewCount++;
-    }
-
-    public void setRecentViewCount(int value)
-    {
-        this.recentViewCount = value;
-    }
-
-    public void setCheckDate(LocalDateTime time)
-    {
-        this.checkDate = time;
-    }
-
-
-    public void downLikeCount()
-    {
-        this.likeCount --;
-    }
-
-       public void modify(String title, String content, String filePath, String fileName)
-    {
-        this.title = title;
-        this.content = content;
-        this.filePath = filePath;
-        this.fileName = fileName;
-        this.modifiedDate = LocalDateTime.now();
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    public void setFile(String filePath, String fileName)
-    {
-        this.filePath = filePath;
-        this.fileName = fileName;
-    }
-
-    public void setNew(boolean set)
-    {
-        this.isNew = set;
-    }
-
-    public void setHot(boolean set)
-    {
-        this.isHot = set;
-    }
-    
 }

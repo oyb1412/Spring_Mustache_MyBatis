@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
+import kr.co.myproject.Mapper.UserMapper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -18,7 +19,6 @@ import kr.co.myproject.Util.CustomOAuth2UserDetails;
 import kr.co.myproject.enums.FindPasswordQuestion;
 import kr.co.myproject.enums.Role;
 import kr.co.myproject.entity.User;
-import kr.co.myproject.repisitory.UserRepository;
 import kr.co.myproject.security.OAuthAttributes;
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final HttpSession session;
 
     @Override
@@ -44,14 +44,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String providerId = oAuthAttributes.getProviderId();
 
         // 유저 존재 여부 확인
-        Optional<User> userOpt = userRepository.findByProviderAndProviderId(provider, providerId);
+        User userOpt = userMapper.findByProviderAndProviderId(provider, providerId);
 
         User user;
-        if (userOpt.isPresent()) {
-            user = userOpt.get(); // 기존 유저 로그인
+        if (userOpt != null) {
+            user = userOpt; // 기존 유저 로그인
         } else {
             user = createTempUser(oAuthAttributes); // 임시 유저 생성
-            userRepository.save(user);
+            userMapper.insert(user);
         }
 
         OAuth2User defaultOAuth2User = new DefaultOAuth2User(

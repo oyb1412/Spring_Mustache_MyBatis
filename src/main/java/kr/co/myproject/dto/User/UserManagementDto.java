@@ -11,8 +11,6 @@ public class UserManagementDto {
     private String nickname;
     private int level;
     private LocalDateTime createdDate;
-    private int postCount;
-    private int commentCount;
     private boolean ban;
 
     public UserManagementDto(User user)
@@ -21,8 +19,6 @@ public class UserManagementDto {
         this.nickname = user.getNickname();
         this.level = user.getLevel();
         this.createdDate = user.getCreatedDate();
-        this.postCount = user.getPosts().size();
-        this.commentCount = user.getComments().size();
         this.ban = user.isBan();
     }
 }
